@@ -1,3 +1,4 @@
+
 # React Basics Quick Look
 
 ## 1. What is JSX?
@@ -254,7 +255,7 @@ class Clock extends React.Component {
 }
 ```
 It is important to note that:
-- The class name is the component name (for both function-defined and class-defined components, the first letter of the component name must be大写, and it inherits from `React.Component`)
+- The class name is the component name (for both function-defined and class-defined components, the first letter of the component name must be UpperCase, and it inherits from `React.Component`)
 - Use the `render()` method to return the content to be rendered
 
 State belongs to the component itself. We can initialize the state in the constructor of the class, such as:
@@ -355,7 +356,7 @@ function ActionLink () {
     );
 }
 ```
-Here, the `event` in the event callback function is specially processed by React (following the W3C standard), so we can use it with confidence without worrying about cross-browser compatibility issues. **Note**: When using event callback functions, we need to pay special attention to the `this` binding issue, because in React, **except for the constructor and lifecycle hook functions where `this` is automatically bound to the current component, in other cases it is not automatically bound to `this`指向 the current component.** Therefore, we need to pay attention to binding `this` ourselves. Usually, in a class component, when using event callback functions, we need to bind the `this`指向 of the callback method in the `constructor` of the component, such as:
+Here, the `event` in the event callback function is specially processed by React (following the W3C standard), so we can use it with confidence without worrying about cross-browser compatibility issues. **Note**: When using event callback functions, we need to pay special attention to the `this` binding issue, because in React, **except for the constructor and lifecycle hook functions where `this` is automatically bound to the current component, in other cases it is not automatically bound to `this`point to the current component.** Therefore, we need to pay attention to binding `this` ourselves. Usually, in a class component, when using event callback functions, we need to bind the `this`point to the callback method in the `constructor` of the component, such as:
 ```javascript
 class Counter extends React.Component {
     constructor (props) {
@@ -363,7 +364,7 @@ class Counter extends React.Component {
         this.state = {
             counter: 0
         }
-        // 在这里绑定指向
+        // Here the bindings point to 
         this.increment = this.increment.bind(this);
     }
     increment () {
@@ -381,7 +382,7 @@ class Counter extends React.Component {
     }
 }
 ```
-Of course, we also have another way to use **arrow functions** to bind the `this`指向, which is to use the **experimental** property initialization syntax, such as:
+Of course, we also have another way to use **arrow functions** to bind the `this`pointer, which is to use the **experimental** property initialization syntax, such as:
 ```javascript
 class Counter extends React.Component {
     increment: () => {
@@ -495,13 +496,14 @@ function LogBtn (props) {
 }
 ```
 **Note**: Returning `null` from a component does not affect the triggering of the component's lifecycle, such as `componentWillUpdate` and `componentDidUpdate`.
+
 ## 11. List Rendering and Keys
 
 In JavaScript, we can use the `map()` function to operate on an array list, such as:
 ```javascript
 const numbers = [1, 2, 3, 4, 5];
 const doubled = numbers.map(number => number*2);
-console.log(doubled); // 得到[2, 4, 6, 8, 10]
+console.log(doubled); // get[2, 4, 6, 8, 10]
 ```
 Similarly, in React, we can use `map()` for list rendering, which relies on React's ability to directly render virtual DOM arrays. For example:
 ```javascript
@@ -576,7 +578,7 @@ const content = posts.map(post => (
 
 ## 12. Forms
 
-Forms in React are different from regular DOM elements in that form elements are designed to maintain their own internal state. In React,可变 states are typically stored in the component's `this.state`, and can only be updated using the `setState()` method.
+Forms in React are different from regular DOM elements in that form elements are designed to maintain their own internal state. In React,mutable states are typically stored in the component's `this.state`, and can only be updated using the `setState()` method.
 
 ### 1. Controlled Components
 
@@ -709,7 +711,7 @@ For `uncontrolled components`, if you want to specify a default value, you can u
 Correspondingly, for `type="checkbox"` and `type="radio"`, use `defaultChecked`
 
 
-### 13. State hoisting
+## 13. State hoisting
 
 When several components need to share state data, state hoisting can be used. The core idea is to extract the data and manage it in the nearest common parent component, which then passes the state down to its children via props. For example, to implement a currency conversion component, we can follow this approach:
 
@@ -787,6 +789,63 @@ class CurrencyConvert extends Component {
 ```
 
 ## 14. Composition vs Inheritance
+
+React encourages the use of composition rather than inheritance. Here are some situations where React suggests using composition:
+1. When the parent component does not know what the content of the child component might be, `props.children` can be used, such as:
+```javascript
+function Article (props) {
+    return (
+        <section>
+            <aside>sidebar</aside>
+            <article>{props.children}</article>
+        </section>
+    );
+}
+
+function App () {
+    return (
+        <Article>This is an article</Article>
+    );
+}
+```
+
+This will render:
+```html
+<section>
+    <aside>sidebar</aside>
+    <article>This is an article</article>
+</section>
+```
+2. We can also customize the name, because JSX is actually converted into valid JavaScript expressions, so we can have:
+```javascript
+function Article (props) {
+    return (
+        <section>
+            <aside>{props.aside}</aside>
+            <article>{props.children}</article>
+        </section>
+    );
+}
+
+function App () {
+    return (
+        <Article aside={
+            <h1>This is a sidebar</h1>
+        }>This is an article</Article>
+    );
+}
+```
+
+This will render:
+```html
+<section>
+    <aside><h1>This is a sidebar</h1></aside>
+    <article>This is an article</article>
+</section>
+```
+
+On Facebook's website, thousands of components are used, but in practice, no cases have been found where inheritance is necessary to solve the problem. Properties and composition provide a clear and safe way to customize the style and behavior of components. Components can accept any elements, including basic data types, React elements, and functions. If you need to reuse UI-agnostic functionality between components, it should be extracted into a separate JavaScript module so that functions, objects, and classes can be imported and used without extending components.# React Basics Quick Look
+
 
 React encourages the use of composition rather than inheritance. Here are some situations where React suggests using composition:
 1. When the parent component does not know what the content of the child component might be, `props.children` can be used, such as:
